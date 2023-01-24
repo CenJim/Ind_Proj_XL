@@ -1,4 +1,4 @@
-## Tektronix arbitrary function generator control
+## A Lab Automation System to Auto-measure the Electro-optical Properties of Liquid Crystal Cell
 
 [![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/asvela/tektronix-func-gen?style=flat-square)](https://www.codefactor.io/repository/github/asvela/tektronix-func-gen)
 [![MIT License](https://img.shields.io/github/license/asvela/dlc-control?style=flat-square)](https://github.com/asvela/dlc-control/blob/main/LICENSE)
