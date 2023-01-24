@@ -8,15 +8,6 @@ Used PyQt to design the user interface.
 
 Used python and Raspberry Pi to control the motor.
 
-API documentation available [here](https://asvela.github.io/tektronix-func-gen/),
-or in the repository [docs/index.html](docs/index.html). (To build the documentation
-yourself use [pdoc3](https://pdoc3.github.io/pdoc/) and run
-`$ python3 pdoc --html -o ./docs/ tektronix_func_gen`.)
-
-Tested on Win10 with NI-VISA and PyVISA v1.11 (if using PyVISA <v1.11 use <v0.4
-of this module).
-
-
 ### Known issues
 
 - **For TekVISA users:** a `pyvisa.errors.VI_ERROR_IO` is raised unless the
