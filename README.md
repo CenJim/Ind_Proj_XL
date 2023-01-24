@@ -1,12 +1,12 @@
 ## A Lab Automation System to Auto-measure the Electro-optical Properties of Liquid Crystal Cell
 
-[![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/asvela/tektronix-func-gen?style=flat-square)](https://www.codefactor.io/repository/github/asvela/tektronix-func-gen)
-[![MIT License](https://img.shields.io/github/license/asvela/dlc-control?style=flat-square)](https://github.com/asvela/dlc-control/blob/main/LICENSE)
+### Technical solutions
 
-Provides basic control of AFG1000 and AFG3000 series Tektronix Arbitrary Function 
-Generators, possibly also others. This includes setting basic settings such as
-selecting functions, transferring or selecting custom waveforms, amplitude and offset
-control, phase syncronisation and frequency locking.
+Used Py-visa to control the lab equipment and automated the measurement process.
+
+Used PyQt to design the user interface.
+
+Used python and Raspberry Pi to control the motor.
 
 API documentation available [here](https://asvela.github.io/tektronix-func-gen/),
 or in the repository [docs/index.html](docs/index.html). (To build the documentation
