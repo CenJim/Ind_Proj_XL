@@ -34,6 +34,8 @@ class Handler:
         self.fgen.ch1.set_offset(0)
         self.fgen.ch1.set_amplitude(amplitude)
         self.fgen_ch1_switch(1)
+        time.sleep(1)
+        self.osc.capture_DC()
         self.osc.analyze_waveform()
 
     # for the fgen_osc experiment
@@ -51,10 +53,11 @@ class Handler:
         for amplitude_vpp in np.arange(0.5, 20, interval):
             self.fgen.ch1.set_amplitude(amplitude_vpp)
             # wait for the function generator to set
-            time.sleep(2)
+            time.sleep(0.5)
+            self.osc.capture_DC()
             Vosc.append(self.osc.measure_DC_Vrms())
             # wait for the scope to set
-            time.sleep(2)
+            time.sleep(0.5)
             Vgen.append(amplitude_vpp)
         print(Vgen)
         print(Vosc)

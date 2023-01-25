@@ -115,7 +115,7 @@
 </ctrl>
 <ctrl type="f64">
 <name>mainScale</name>
-<val>4576918229304087676</val>
+<val>4562254508917369340</val>
 </ctrl>
 <ctrl type="f64">
 <name>mainDelay</name>
@@ -1278,15 +1278,15 @@
 </ctrl>
 <ctrl type="f64">
 <name>chan1Scale</name>
-<val>4602678819172646912</val>
+<val>4607182418800017408</val>
 </ctrl>
 <ctrl type="f64">
 <name>chan1Offset</name>
-<val>4345973640412528640</val>
+<val>-4646453807550688136</val>
 </ctrl>
 <ctrl type="f64">
 <name>chan1Position</name>
-<val>-9223372036854775808</val>
+<val>4576918229304087675</val>
 </ctrl>
 <ctrl type="f64">
 <name>chan1TekOffset</name>
@@ -1322,7 +1322,7 @@
 </ctrl>
 <ctrl type="f64">
 <name>chan1TrigLevelHigh</name>
-<val>4591870180066957722</val>
+<val>4607182418800017408</val>
 </ctrl>
 <ctrl type="f64">
 <name>chan1TrigLevelLow</name>
@@ -1537,181 +1537,6 @@
 <val>0</val>
 </ctrl>
 <ctrl type="enum">
-<name>digitalBitSelect</name>
-<val>0,"digBitId0"</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalBitState</name>
-<val muxpos="0">0,"off"</val>
-<val muxpos="1">0,"off"</val>
-<val muxpos="2">0,"off"</val>
-<val muxpos="3">0,"off"</val>
-<val muxpos="4">0,"off"</val>
-<val muxpos="5">0,"off"</val>
-<val muxpos="6">0,"off"</val>
-<val muxpos="7">0,"off"</val>
-<val muxpos="8">0,"off"</val>
-<val muxpos="9">0,"off"</val>
-<val muxpos="10">0,"off"</val>
-<val muxpos="11">0,"off"</val>
-<val muxpos="12">0,"off"</val>
-<val muxpos="13">0,"off"</val>
-<val muxpos="14">0,"off"</val>
-<val muxpos="15">0,"off"</val>
-</ctrl>
-<ctrl type="str">
-<name>digitalBitLabel</name>
-<val muxpos="0">D0</val>
-<val muxpos="1">D1</val>
-<val muxpos="2">D2</val>
-<val muxpos="3">D3</val>
-<val muxpos="4">D4</val>
-<val muxpos="5">D5</val>
-<val muxpos="6">D6</val>
-<val muxpos="7">D7</val>
-<val muxpos="8">D8</val>
-<val muxpos="9">D9</val>
-<val muxpos="10">D10</val>
-<val muxpos="11">D11</val>
-<val muxpos="12">D12</val>
-<val muxpos="13">D13</val>
-<val muxpos="14">D14</val>
-<val muxpos="15">D15</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalPod0State</name>
-<val>0,"off"</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalPod0LogicFamily</name>
-<val>0,"ttl"</val>
-</ctrl>
-<ctrl type="f64">
-<name>digitalPod0UserLevel</name>
-<val>0</val>
-</ctrl>
-<ctrl type="f64">
-<name>digitalPod0Level</name>
-<val>4608983858543591424</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalPod1State</name>
-<val>0,"off"</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalPod1LogicFamily</name>
-<val>0,"ttl"</val>
-</ctrl>
-<ctrl type="f64">
-<name>digitalPod1UserLevel</name>
-<val>0</val>
-</ctrl>
-<ctrl type="f64">
-<name>digitalPod1Level</name>
-<val>4608983858543591424</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalBusSelect</name>
-<val>0,"b1"</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalBus1State</name>
-<val>0,"off"</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalBus1BitState</name>
-<val muxpos="0">1,"on"</val>
-<val muxpos="1">1,"on"</val>
-<val muxpos="2">1,"on"</val>
-<val muxpos="3">1,"on"</val>
-<val muxpos="4">1,"on"</val>
-<val muxpos="5">1,"on"</val>
-<val muxpos="6">1,"on"</val>
-<val muxpos="7">1,"on"</val>
-<val muxpos="8">0,"off"</val>
-<val muxpos="9">0,"off"</val>
-<val muxpos="10">0,"off"</val>
-<val muxpos="11">0,"off"</val>
-<val muxpos="12">0,"off"</val>
-<val muxpos="13">0,"off"</val>
-<val muxpos="14">0,"off"</val>
-<val muxpos="15">0,"off"</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalBus1Base</name>
-<val>0,"hex"</val>
-</ctrl>
-<ctrl type="str">
-<name>digitalBus1Label</name>
-<val>Bus1</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalBus2State</name>
-<val>0,"off"</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalBus2BitState</name>
-<val muxpos="0">0,"off"</val>
-<val muxpos="1">0,"off"</val>
-<val muxpos="2">0,"off"</val>
-<val muxpos="3">0,"off"</val>
-<val muxpos="4">0,"off"</val>
-<val muxpos="5">0,"off"</val>
-<val muxpos="6">0,"off"</val>
-<val muxpos="7">0,"off"</val>
-<val muxpos="8">1,"on"</val>
-<val muxpos="9">1,"on"</val>
-<val muxpos="10">1,"on"</val>
-<val muxpos="11">1,"on"</val>
-<val muxpos="12">1,"on"</val>
-<val muxpos="13">1,"on"</val>
-<val muxpos="14">1,"on"</val>
-<val muxpos="15">1,"on"</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalBus2Base</name>
-<val>0,"hex"</val>
-</ctrl>
-<ctrl type="str">
-<name>digitalBus2Label</name>
-<val>Bus2</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalState</name>
-<val>0,"off"</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalChanSelect</name>
-<val>-1</val>
-</ctrl>
-<ctrl type="enum">
-<name>digitalTraceSize</name>
-<val>1,"medium"</val>
-</ctrl>
-<ctrl type="i32">
-<name>digitalBitPosition</name>
-<val muxpos="0">0</val>
-<val muxpos="1">1</val>
-<val muxpos="2">2</val>
-<val muxpos="3">3</val>
-<val muxpos="4">4</val>
-<val muxpos="5">5</val>
-<val muxpos="6">6</val>
-<val muxpos="7">7</val>
-<val muxpos="8">8</val>
-<val muxpos="9">9</val>
-<val muxpos="10">10</val>
-<val muxpos="11">11</val>
-<val muxpos="12">12</val>
-<val muxpos="13">13</val>
-<val muxpos="14">14</val>
-<val muxpos="15">15</val>
-</ctrl>
-<ctrl type="i32">
-<name>digitalSelectByOrder</name>
-<val>0</val>
-</ctrl>
-<ctrl type="enum">
 <name>func1On</name>
 <val>0,"off"</val>
 </ctrl>
@@ -1769,11 +1594,11 @@
 </ctrl>
 <ctrl type="f64">
 <name>func1FftSpan</name>
-<val>4689120911519907840</val>
+<val>4703976035165667328</val>
 </ctrl>
 <ctrl type="f64">
 <name>func1FftCenter</name>
-<val>4684617311892537344</val>
+<val>4699472435538296832</val>
 </ctrl>
 <ctrl type="enum">
 <name>func1FftWindow</name>
@@ -1873,11 +1698,11 @@
 </ctrl>
 <ctrl type="f64">
 <name>func2FftSpan</name>
-<val>4689120911519907840</val>
+<val>4703976035165667328</val>
 </ctrl>
 <ctrl type="f64">
 <name>func2FftCenter</name>
-<val>4684617311892537344</val>
+<val>4699472435538296832</val>
 </ctrl>
 <ctrl type="enum">
 <name>func2FftWindow</name>
@@ -1977,7 +1802,7 @@
 </ctrl>
 <ctrl type="f64">
 <name>wfmMem1XScale</name>
-<val>4576918229304087676</val>
+<val>4562254508917369340</val>
 </ctrl>
 <ctrl type="f64">
 <name>wfmMem1XPosition</name>
@@ -2021,7 +1846,7 @@
 </ctrl>
 <ctrl type="f64">
 <name>wfmMem2XScale</name>
-<val>4576918229304087676</val>
+<val>4562254508917369340</val>
 </ctrl>
 <ctrl type="f64">
 <name>wfmMem2XPosition</name>
@@ -2101,7 +1926,7 @@
 </ctrl>
 <ctrl type="enum">
 <name>meas2Alg</name>
-<val>0,"freq"</val>
+<val>25,"rmsDcFs"</val>
 </ctrl>
 <ctrl type="enum">
 <name>meas2Src1Slope</name>
@@ -2121,7 +1946,7 @@
 </ctrl>
 <ctrl type="enum">
 <name>meas3Src1</name>
-<val>0,"ch1"</val>
+<val>-1</val>
 </ctrl>
 <ctrl type="enum">
 <name>meas3Src2</name>
@@ -2129,7 +1954,7 @@
 </ctrl>
 <ctrl type="enum">
 <name>meas3Alg</name>
-<val>25,"rmsDcFs"</val>
+<val>-1,"none"</val>
 </ctrl>
 <ctrl type="enum">
 <name>meas3Src1Slope</name>
@@ -2349,7 +2174,7 @@
 </ctrl>
 <ctrl type="f64">
 <name>measDefThresholdAbsoluteTop</name>
-<val muxpos="0">4594572339843380019</val>
+<val muxpos="0">4609434218613702656</val>
 <val muxpos="1">4609434218613702656</val>
 <val muxpos="2">4611686018427387904</val>
 <val muxpos="3">4611686018427387904</val>
@@ -2391,7 +2216,7 @@
 </ctrl>
 <ctrl type="f64">
 <name>measDefThresholdAbsoluteMid</name>
-<val muxpos="0">4593311331947716280</val>
+<val muxpos="0">4608083138725491507</val>
 <val muxpos="1">4608083138725491507</val>
 <val muxpos="2">4607182418800017408</val>
 <val muxpos="3">4607182418800017408</val>
@@ -2433,7 +2258,7 @@
 </ctrl>
 <ctrl type="f64">
 <name>measDefThresholdAbsoluteBot</name>
-<val muxpos="0">4590429028186199163</val>
+<val muxpos="0">4605380978949069210</val>
 <val muxpos="1">4605380978949069210</val>
 <val muxpos="2">0</val>
 <val muxpos="3">0</val>
@@ -2495,11 +2320,11 @@
 </ctrl>
 <ctrl type="f64">
 <name>markerDualX</name>
-<val>-4636005456415188583</val>
+<val>-4650957407178058629</val>
 </ctrl>
 <ctrl type="f64">
 <name>markerDualY</name>
-<val>4604612401783613051</val>
+<val>4610734015216159245</val>
 </ctrl>
 <ctrl type="enum">
 <name>marker1Src</name>
@@ -2515,7 +2340,7 @@
 </ctrl>
 <ctrl type="f64">
 <name>marker1X</name>
-<val>-4636005456415188583</val>
+<val>-4650957407178058629</val>
 </ctrl>
 <ctrl type="enum">
 <name>marker1YOn</name>
@@ -2523,7 +2348,7 @@
 </ctrl>
 <ctrl type="f64">
 <name>marker1Y</name>
-<val>4604612401783613051</val>
+<val>4610734015216159245</val>
 </ctrl>
 <ctrl type="enum">
 <name>marker2Src</name>
@@ -2535,7 +2360,7 @@
 </ctrl>
 <ctrl type="f64">
 <name>marker2X</name>
-<val>4587366580439587225</val>
+<val>4572414629676717179</val>
 </ctrl>
 <ctrl type="enum">
 <name>marker2YOn</name>
@@ -2571,7 +2396,7 @@
 </ctrl>
 <ctrl type="enum">
 <name>markerSelect</name>
-<val>0,"x1"</val>
+<val>3,"y1"</val>
 </ctrl>
 <ctrl type="enum">
 <name>auxOutput</name>

@@ -189,7 +189,7 @@ class Dsox2002a():
 
     def measure_DC_Vrms(self):
         # return the Vrms value
-        self.do_command(":AUToscale")
+        # self.do_command(":AUToscale")
         self.do_command(":MEASure:VRMS DISPlay,DC,CHANnel1")
         qresult = float(self.do_query_string(":MEASure:VRMS?"))
         print("Measured DC RMS on channel 1: %.3f" % qresult)

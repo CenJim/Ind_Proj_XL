@@ -14,7 +14,7 @@ class Widget_top_right(QWidget):
         self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.response = QLabel('Response Time:')
         self.angle = QLabel('Angle of cell:')
-        self.amplitude = QLabel('Amplitude:')
+        self.amplitude = QLabel('Amplitude (DCVrms):')
 
         self.amplitude_value = QLabel()
 

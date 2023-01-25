@@ -12,10 +12,10 @@ import numpy as np
 
 class MainWindow(QMainWindow):
 
-    def __init__(self, *handler):
+    def __init__(self, handler):
         super().__init__()
 
-        self.test = 1
+        self.test = 0
         # init the widgets that contains the sub-layouts
         self.widget_top_left = Widget_top_left()
         self.widget_top_right = Widget_top_right()
@@ -86,16 +86,16 @@ class MainWindow(QMainWindow):
     def run_waveform(self):
         print('running waveform')
         # capture the waveform of the scope and store them into the .csv file
-        # self.handler.waveform(self.widget_top_left.amplitude, self.widget_top_left.frequency)
+        self.handler.waveform(self.widget_top_left.amplitude, self.widget_top_left.frequency)
         # plot the .csv file
         # measure the value and display
-        # self.widget_top_right.setAmplitude(self.handler.osc.measure_DC_Vrms())
+        self.widget_top_right.setAmplitude(self.handler.osc.measure_DC_Vrms())
         self.widget_bottom_left.plot()
 
     def run_fgen_osc(self):
         print('running draw fgen_osc')
-        # result = self.handler.draw_Vgen_Vosc_chart(self.widget_top_left.interval)
-        result = np.array([(0, 1, 2, 3), (0, 1, 2, 3)])
+        result = self.handler.draw_Vgen_Vosc_chart(self.widget_top_left.interval)
+        # result = np.array([(0, 1, 2, 3), (0, 1, 2, 3)])
         self.widget_bottom_right.plot(result)
 
     def run_square(self):
