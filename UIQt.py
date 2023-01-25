@@ -100,9 +100,17 @@ class MainWindow(QMainWindow):
 
     def run_square(self):
         print('running square')
+        self.handler.run_square(self.widget_top_left.amplitude, self.widget_top_left.frequency,
+                                self.widget_top_left.modulation)
+        self.handler.capture()
+        self.widget_bottom_left.plot()
 
     def run_triangle(self):
         print('running triangle')
+        self.handler.run_triangle(self.widget_top_left.amplitude, self.widget_top_left.frequency,
+                                self.widget_top_left.modulation)
+        self.handler.capture()
+        self.widget_bottom_left.plot()
 
 
 def mainWindow(handler):

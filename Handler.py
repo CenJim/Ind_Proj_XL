@@ -62,3 +62,23 @@ class Handler:
         print(Vgen)
         print(Vosc)
         return np.array([Vgen, Vosc])
+
+    def run_square(self, amplitude, frquency, modulation: int):
+        self.fgen_ch2_switch(0)
+        self.fgen.ch1.set_function("SQU")
+        self.fgen.ch1.set_frequency(frquency, unit="Hz")
+        self.fgen.ch1.set_offset(0)
+        self.fgen.ch1.set_amplitude(amplitude)
+        self.fgen.ch2.set_AM(modulation)
+
+    def run_triangle(self, amplitude, frquency, modulation: int):
+        self.fgen_ch2_switch(0)
+        self.fgen.ch1.set_function("RAMP")
+        self.fgen.ch1.set_frequency(frquency, unit="Hz")
+        self.fgen.ch1.set_offset(0)
+        self.fgen.ch1.set_amplitude(amplitude)
+        self.fgen.ch2.set_AM(modulation)
+
+    def capture(self):
+        self.osc.capture_DC()
+        self.osc.analyze_waveform()

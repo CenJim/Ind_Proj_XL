@@ -50,6 +50,7 @@ with tfg.FuncGen('USB0::0x0699::0x0353::1516608::INSTR') as fgen:
     fgen.print_settings()
 """
 
+print(getResoureList())
 handler = hl.Handler(ds.Dsox2002a(pyvisa.ResourceManager(), 'USB0::0x0957::0x179B::MY55442396::INSTR'),
                      tfg.FuncGen('USB0::0x0699::0x0353::1516608::INSTR'))
 

@@ -1271,6 +1271,11 @@ class FuncGenChannel:
                 )
                 raise NotSetError(msg)
 
+    # if flag == 1 turn on the modulation
+    def set_AM(self, flag: int):
+        self._fgen.write(f'SOURce1:AM:STATe {flag}')
+
+
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXAMPLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
