@@ -86,10 +86,16 @@ class MainWindow(QMainWindow):
     def run_waveform(self):
         print('running waveform')
         # capture the waveform of the scope and store them into the .csv file
-        self.handler.waveform(self.widget_top_left.amplitude, self.widget_top_left.frequency)
+        self.handler.waveform(self.widget_top_left.amplitude, self.widget_top_left.frequency,
+                              self.widget_top_left.modulation)
         # plot the .csv file
         # measure the value and display
         self.widget_top_right.setDCVrms(self.handler.osc.measure_DC_Vrms())
+        self.widget_top_right.setVpp(self.handler.osc.measure_Vpp())
+        self.widget_top_right.setVmax(self.handler.osc.measure_Vmax())
+        self.widget_top_right.setFrequency(self.handler.osc.measure_frequency())
+        self.widget_top_right.setPeriod(self.handler.osc.measure_period())
+        # draw the waveform
         self.widget_bottom_left.plot()
 
     def run_fgen_osc(self):
@@ -103,13 +109,27 @@ class MainWindow(QMainWindow):
         self.handler.run_square(self.widget_top_left.amplitude, self.widget_top_left.frequency,
                                 self.widget_top_left.modulation)
         self.handler.capture()
+        # measure the value and display
+        self.widget_top_right.setDCVrms(self.handler.osc.measure_DC_Vrms())
+        self.widget_top_right.setVpp(self.handler.osc.measure_Vpp())
+        self.widget_top_right.setVmax(self.handler.osc.measure_Vmax())
+        self.widget_top_right.setFrequency(self.handler.osc.measure_frequency())
+        self.widget_top_right.setPeriod(self.handler.osc.measure_period())
+        # draw the waveform
         self.widget_bottom_left.plot()
 
     def run_triangle(self):
         print('running triangle')
         self.handler.run_triangle(self.widget_top_left.amplitude, self.widget_top_left.frequency,
-                                self.widget_top_left.modulation)
+                                  self.widget_top_left.modulation)
         self.handler.capture()
+        # measure the value and display
+        self.widget_top_right.setDCVrms(self.handler.osc.measure_DC_Vrms())
+        self.widget_top_right.setVpp(self.handler.osc.measure_Vpp())
+        self.widget_top_right.setVmax(self.handler.osc.measure_Vmax())
+        self.widget_top_right.setFrequency(self.handler.osc.measure_frequency())
+        self.widget_top_right.setPeriod(self.handler.osc.measure_period())
+        # draw the waveform
         self.widget_bottom_left.plot()
 
 

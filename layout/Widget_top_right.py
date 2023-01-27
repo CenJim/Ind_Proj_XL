@@ -75,6 +75,24 @@ class Widget_top_right(QWidget):
 
         self.setLayout(self.grid)
 
-    def setDCVrms(self, amplitude):
-        self.dcvrms_value.setNum(amplitude)
+    def setResponse(self, response_time):
+        self.response_value.setNum(response_time)
+
+    def setAngle(self, angle_value):
+        self.angle_value.setNum(angle_value)
+
+    def setDCVrms(self, dcvrms_value):
+        self.dcvrms_value.setNum(dcvrms_value)
+
+    def setVpp(self, vpp_value):
+        self.vpp_value.setNum(vpp_value)
+
+    def setVmax(self, vmax_value):
+        self.vmax_value.setNum(vmax_value)
+
+    def setFrequency(self, frequency_value):
+        self.frequency_value.setNum(frequency_value)
+
+    def setPeriod(self, period_value):
+        self.period_value.setNum(period_value * 1000)
 

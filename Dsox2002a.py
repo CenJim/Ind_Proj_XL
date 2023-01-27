@@ -195,6 +195,30 @@ class Dsox2002a():
         print("Measured DC RMS on channel 1: %.3f" % qresult)
         return qresult
 
+    def measure_Vpp(self):
+        self.do_command(":MEASure:VPP CHANnel1")
+        qresult = float(self.do_query_string(":MEASure:VPP?"))
+        print("Measured Vpp on channel 1: %.3f" % qresult)
+        return qresult
+
+    def measure_Vmax(self):
+        self.do_command(":MEASure:VMAX CHANnel1")
+        qresult = float(self.do_query_string(":MEASure:VMAX?"))
+        print("Measured Vmax on channel 1: %.3f" % qresult)
+        return qresult
+
+    def measure_frequency(self):
+        self.do_command(":MEASure:FREQuency CHANnel1")
+        qresult = float(self.do_query_string(":MEASure:FREQuency?"))
+        print("Measured Frequency on channel 1: %.3f" % qresult)
+        return qresult
+
+    def measure_period(self):
+        self.do_command(":MEASure:PERiod CHANnel1")
+        qresult = float(self.do_query_string(":MEASure:PERiod?"))
+        print("Measured Period on channel 1: %.3f" % qresult)
+        return qresult
+
     def analyze_waveform(self):
         # Download waveform data.
         # --------------------------------------------------------

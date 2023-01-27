@@ -34,12 +34,12 @@ class Widget_top_left(QWidget):
         # text input for voltage setting
         qle_amplitude = QLineEdit(self)
         qle_amplitude.textChanged[str].connect(self.amplitudeChanged)
-        qle_amplitude.setMaximumWidth(self.width() * 0.2)
+        qle_amplitude.setMaximumWidth(self.width() * 0.27)
 
         # text input for frequency setting
         qle_frequency = QLineEdit(self)
         qle_frequency.textChanged[str].connect(self.frequencyChanged)
-        qle_frequency.setMaximumWidth(self.width() * 0.2)
+        qle_frequency.setMaximumWidth(self.width() * 0.27)
 
         # Drop down menu for mode setting
         combo_mode = QComboBox(self)
@@ -48,19 +48,19 @@ class Widget_top_left(QWidget):
         combo_mode.addItem('Square Waveform')
         combo_mode.addItem('Triangle Waveform')
         combo_mode.textActivated[str].connect(self.modeSelected)
-        combo_mode.setMaximumWidth(self.width() * 0.2)
+        combo_mode.setMaximumWidth(self.width() * 0.27)
 
         # Text input for interval setting
         qle_interval = QLineEdit(self)
         qle_interval.textChanged[str].connect(self.intervalChanged)
-        qle_interval.setMaximumWidth(self.width() * 0.2)
+        qle_interval.setMaximumWidth(self.width() * 0.27)
 
         # Drop down menu for modulation setting
         combo_modulation = QComboBox(self)
         combo_modulation.addItem('Off')
         combo_modulation.addItem('On')
         combo_modulation.textActivated[str].connect(self.modulationSelected)
-        combo_modulation.setMaximumWidth(self.width() * 0.2)
+        combo_modulation.setMaximumWidth(self.width() * 0.27)
 
         self.grid.setSpacing(10)
         self.grid.addWidget(self.title)

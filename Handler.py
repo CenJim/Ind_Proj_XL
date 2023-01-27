@@ -27,7 +27,8 @@ class Handler:
         self.osc.connect()
 
     # for the draw waveform experiment
-    def waveform(self, amplitude, frquency):
+    def waveform(self, amplitude, frquency, modulation: int):
+        self.fgen.ch1.set_AM(modulation)
         self.fgen_ch2_switch(0)
         self.fgen.ch1.set_function("SIN")
         self.fgen.ch1.set_frequency(frquency, unit="Hz")
@@ -69,7 +70,7 @@ class Handler:
         self.fgen.ch1.set_frequency(frquency, unit="Hz")
         self.fgen.ch1.set_offset(0)
         self.fgen.ch1.set_amplitude(amplitude)
-        self.fgen.ch2.set_AM(modulation)
+        self.fgen.ch1.set_AM(modulation)
 
     def run_triangle(self, amplitude, frquency, modulation: int):
         self.fgen_ch2_switch(0)
@@ -77,7 +78,7 @@ class Handler:
         self.fgen.ch1.set_frequency(frquency, unit="Hz")
         self.fgen.ch1.set_offset(0)
         self.fgen.ch1.set_amplitude(amplitude)
-        self.fgen.ch2.set_AM(modulation)
+        self.fgen.ch1.set_AM(modulation)
 
     def capture(self):
         self.osc.capture_DC()
