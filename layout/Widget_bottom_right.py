@@ -17,6 +17,7 @@ class Widget_bottom_right(QWidget):
     def initUI(self):
         title = QLabel('Data Chart')
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setStyleSheet("QLabel{font-size:14px;font-weight:bold;}")
 
         self.grid.setSpacing(10)
         self.grid.addWidget(title)

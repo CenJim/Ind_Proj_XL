@@ -19,6 +19,7 @@ class Widget_bottom_left(QWidget):
 
         title = QLabel('The Waveform of Oscilloscope')
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setStyleSheet("QLabel{font-size:14px;font-weight:bold;}")
 
         self.grid.setSpacing(10)
         self.grid.addWidget(title)

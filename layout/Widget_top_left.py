@@ -1,4 +1,5 @@
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QWidget, QLabel, QGridLayout, QVBoxLayout, QComboBox, QLineEdit
 
 
@@ -7,21 +8,22 @@ class Widget_top_left(QWidget):
     def __init__(self):
         super().__init__()
 
+        # title
+        self.title = QLabel('Working Mode Set')
+        self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.title.setStyleSheet("QLabel{font-size:14px;font-weight:bold;}")
+
         self.grid = QVBoxLayout()
         self.subgrid = QGridLayout()
-        self.amplitude = 0.0     # default value is 0 V
+        self.amplitude = 0.0  # default value is 0 V
         self.frequency = 1000.0  # default value is 1000 Hz
-        self.interval = 1.0      # default value
-        self.mode = 1            # default mode is the first mode
-        self.modulation = 0      # default modulation mode is off
+        self.interval = 1.0  # default value
+        self.mode = 1  # default mode is the first mode
+        self.modulation = 0  # default modulation mode is off
 
         self.initUI()
 
     def initUI(self):
-        # title
-        title = QLabel('Working Mode Set')
-        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
         # five settings
         mode = QLabel('Mode:')
         amplitude = QLabel('Amplitude (Volts):')
@@ -46,6 +48,7 @@ class Widget_top_left(QWidget):
         combo_mode.addItem('Square Waveform')
         combo_mode.addItem('Triangle Waveform')
         combo_mode.textActivated[str].connect(self.modeSelected)
+        combo_mode.setMaximumWidth(self.width() * 0.2)
 
         # Text input for interval setting
         qle_interval = QLineEdit(self)
@@ -57,9 +60,10 @@ class Widget_top_left(QWidget):
         combo_modulation.addItem('Off')
         combo_modulation.addItem('On')
         combo_modulation.textActivated[str].connect(self.modulationSelected)
+        combo_modulation.setMaximumWidth(self.width() * 0.2)
 
         self.grid.setSpacing(10)
-        self.grid.addWidget(title)
+        self.grid.addWidget(self.title)
         self.grid.addLayout(self.subgrid)
         self.subgrid.addWidget(mode, 0, 0)
         self.subgrid.addWidget(combo_mode, 0, 1)

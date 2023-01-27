@@ -1,6 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QMainWindow, QTextEdit, QApplication, QGridLayout, QLabel, QWidget
 from PyQt6.QtGui import QIcon, QAction
+from qt_material import apply_stylesheet
 
 from layout.Widget_bottom_left import Widget_bottom_left
 from layout.Widget_bottom_right import Widget_bottom_right
@@ -71,7 +72,6 @@ class MainWindow(QMainWindow):
         # set the main window
         self.setGeometry(300, 300, 950, 650)
         self.setWindowTitle('Main window')
-        self.show()
 
     def run(self):
         if self.widget_top_left.mode == 1:
@@ -89,7 +89,7 @@ class MainWindow(QMainWindow):
         self.handler.waveform(self.widget_top_left.amplitude, self.widget_top_left.frequency)
         # plot the .csv file
         # measure the value and display
-        self.widget_top_right.setAmplitude(self.handler.osc.measure_DC_Vrms())
+        self.widget_top_right.setDCVrms(self.handler.osc.measure_DC_Vrms())
         self.widget_bottom_left.plot()
 
     def run_fgen_osc(self):
@@ -116,6 +116,8 @@ class MainWindow(QMainWindow):
 def mainWindow(handler):
     app = QApplication(sys.argv)
     mainWindow = MainWindow(handler)
+    apply_stylesheet(app, theme='dark_teal.xml')
+    mainWindow.show()
     sys.exit(app.exec())
 
 
