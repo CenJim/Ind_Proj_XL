@@ -277,17 +277,17 @@ class Dsox2002a():
         values = struct.unpack("%dB" % len(bytes(sData)), bytes(sData))
         print("Number of data values: %d" % len(values))
         # Save waveform data values to CSV file.
-        f = open("waveform_data.csv", "w")
+        f = open("data/waveform_data.csv", "w")
         for i in range(0, len(values) - 1):
             time_val = x_origin + (i * x_increment)
             voltage = ((values[i] - y_reference) * y_increment) + y_origin
             f.write("%E, %f\n" % (time_val, voltage))
         f.close()
         print("Waveform format BYTE data written to waveform_data.csv.")
-        # waveform_data = pd.read_csv('waveform_data.csv')
+        # waveform_data = pd.read_csv('data/waveform_data.csv')
         # waveform_data.plot(0,1)
         # plt.show()
-        self.draw_csv('waveform_data.csv')
+        self.draw_csv('data/waveform_data.csv')
 
     # draw the csv file
     def draw_csv(self, fileName):

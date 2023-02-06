@@ -26,7 +26,7 @@ class Widget_top_left(QWidget):
     def initUI(self):
         # five settings
         mode = QLabel('Mode:')
-        amplitude = QLabel('Amplitude (Volts):')
+        amplitude = QLabel('Amplitude (Vpp):')
         frequency = QLabel('Frequency (Hz):')
         interval = QLabel('Interval (Volts):')
         modulation = QLabel('Amplitude Modulation:')
@@ -37,7 +37,7 @@ class Widget_top_left(QWidget):
         qle_amplitude.setMaximumWidth(self.width() * 0.27)
 
         # text input for frequency setting
-        qle_frequency = QLineEdit(self)
+        qle_frequency = QLineEdit("1000", self)
         qle_frequency.textChanged[str].connect(self.frequencyChanged)
         qle_frequency.setMaximumWidth(self.width() * 0.27)
 

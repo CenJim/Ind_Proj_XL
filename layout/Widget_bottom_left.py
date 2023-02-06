@@ -29,7 +29,7 @@ class Widget_bottom_left(QWidget):
 
     def plot(self):
         self.graphWidget.clear()
-        data = pd.read_csv('waveform_data.csv')
+        data = pd.read_csv('data/waveform_data.csv')
         time = np.array(data.iloc[:, 0])
         amplitude = np.array(data.iloc[:, 1])
         self.graphWidget.plot(time, amplitude)

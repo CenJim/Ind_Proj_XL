@@ -165,7 +165,7 @@ def analyze():
     values = struct.unpack("%dB" % len(sData), sData)
     print("Number of data values: %d" % len(values))
     # Save waveform data values to CSV file.
-    f = open("waveform_data.csv", "w")
+    f = open("data/waveform_data.csv", "w")
     for i in range(0, len(values) - 1):
         time_val = x_origin + (i * x_increment)
         voltage = ((values[i] - y_reference) * y_increment) + y_origin

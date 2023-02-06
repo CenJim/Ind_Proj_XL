@@ -40,10 +40,10 @@ class Handler:
         self.osc.analyze_waveform()
 
     # for the fgen_osc experiment
-    def draw_Vgen_Vosc_chart(self, interval):
+    def draw_Vgen_Vosc_chart(self, interval, frequency):
         self.fgen_ch2_switch(0)
         self.fgen.ch1.set_function("SIN")
-        self.fgen.ch1.set_frequency(1000, unit="Hz")
+        self.fgen.ch1.set_frequency(frequency, unit="Hz")
         self.fgen.ch1.set_offset(0)
         self.fgen.ch1.set_amplitude(0.5)
         self.fgen_ch1_switch(1)
@@ -62,6 +62,10 @@ class Handler:
             Vgen.append(amplitude_vpp)
         print(Vgen)
         print(Vosc)
+        f = open("data/fgen_osc_data.csv", "w")
+        for i in range(0, len(Vgen) - 1):
+            f.write("%f, %f\n" % (Vgen[i], Vosc[i]))
+        f.close()
         return np.array([Vgen, Vosc])
 
     def run_square(self, amplitude, frquency, modulation: int):

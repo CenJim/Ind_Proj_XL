@@ -1,5 +1,6 @@
+import os
 import sys
-from PyQt6.QtWidgets import QMainWindow, QTextEdit, QApplication, QGridLayout, QLabel, QWidget
+from PyQt6.QtWidgets import QMainWindow, QTextEdit, QApplication, QGridLayout, QLabel, QWidget, QFileDialog
 from PyQt6.QtGui import QIcon, QAction
 from qt_material import apply_stylesheet
 
@@ -42,6 +43,12 @@ class MainWindow(QMainWindow):
         runAct.setStatusTip('Run application')
         runAct.triggered.connect(self.run)
 
+        # create a data download action
+        downloadAct = QAction(QIcon('icon/database-download.svg'), 'Download', self)
+        downloadAct.setShortcut('Ctrl+S')
+        downloadAct.setStatusTip('Download the csv data')
+        downloadAct.triggered.connect(lambda: self.download_data())
+
         # init a statusbar
         self.statusBar()
 
@@ -54,6 +61,7 @@ class MainWindow(QMainWindow):
         toolbar = self.addToolBar('Exit')
         toolbar.addAction(exitAct)
         toolbar.addAction(runAct)
+        toolbar.addAction(downloadAct)
 
         # init a central widget
         central_widget = QWidget()
@@ -83,6 +91,9 @@ class MainWindow(QMainWindow):
         elif self.widget_top_left.mode == 4:
             self.run_triangle()
 
+    def download_data(self):
+        file_path = QFileDialog.getOpenFileNames(self, "Download Data", os.getcwd() + "/data", "Csv files(*.csv)")
+
     def run_waveform(self):
         print('running waveform')
         # capture the waveform of the scope and store them into the .csv file
@@ -100,7 +111,7 @@ class MainWindow(QMainWindow):
 
     def run_fgen_osc(self):
         print('running draw fgen_osc')
-        result = self.handler.draw_Vgen_Vosc_chart(self.widget_top_left.interval)
+        result = self.handler.draw_Vgen_Vosc_chart(self.widget_top_left.interval, self.widget_top_left.frequency)
         # result = np.array([(0, 1, 2, 3), (0, 1, 2, 3)])
         self.widget_bottom_right.plot(result)
 
