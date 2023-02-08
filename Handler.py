@@ -26,17 +26,42 @@ class Handler:
     def osc_connect(self):
         self.osc.connect()
 
-    # for the draw waveform experiment
-    def waveform(self, amplitude, frquency, modulation: int):
+    def setFunGen(self, waveShape: int, amplitude, frequency, modulation: int):
         self.fgen.ch1.set_AM(modulation)
         self.fgen_ch2_switch(0)
+        if waveShape == 0:
+            self.fgen.ch1.set_function("SIN")
+        elif waveShape == 1:
+            self.fgen.ch1.set_function("SQU")
+        elif waveShape == 2:
+            self.fgen.ch1.set_function("RAMP")
+        elif waveShape == 3:
+            self.fgen.ch1.set_function("PULS")
+        self.fgen.ch1.set_frequency(frequency, unit="Hz")
+        self.fgen.ch1.set_offset(0)
+        self.fgen.ch1.set_amplitude(amplitude)
+        self.fgen_ch1_switch(1)
+
+
+    # for the draw waveform experiment
+    def waveform(self, waveShape: int, amplitude, frequency, modulation: int):
+        self.fgen.ch1.set_AM(modulation)
+        self.fgen_ch2_switch(0)
+        if waveShape == 0:
+            self.fgen.ch1.set_function("SIN")
+        elif waveShape == 1:
+            self.fgen.ch1.set_function("SQU")
+        elif waveShape == 2:
+            self.fgen.ch1.set_function("RAMP")
+        elif waveShape == 3:
+            self.fgen.ch1.set_function("PULS")
         self.fgen.ch1.set_function("SIN")
-        self.fgen.ch1.set_frequency(frquency, unit="Hz")
+        self.fgen.ch1.set_frequency(frequency, unit="Hz")
         self.fgen.ch1.set_offset(0)
         self.fgen.ch1.set_amplitude(amplitude)
         self.fgen_ch1_switch(1)
         time.sleep(1)
-        self.osc.capture_DC()
+        # self.osc.capture_DC()
         self.osc.analyze_waveform()
 
     # for the fgen_osc experiment
@@ -47,7 +72,7 @@ class Handler:
         self.fgen.ch1.set_offset(0)
         self.fgen.ch1.set_amplitude(0.5)
         self.fgen_ch1_switch(1)
-        self.osc.capture_DC()
+        #self.osc.capture_DC()
         i = 0
         Vgen = []
         Vosc = []
@@ -55,7 +80,7 @@ class Handler:
             self.fgen.ch1.set_amplitude(amplitude_vpp)
             # wait for the function generator to set
             time.sleep(0.5)
-            self.osc.capture_DC()
+            #self.osc.capture_DC()
             Vosc.append(self.osc.measure_DC_Vrms())
             # wait for the scope to set
             time.sleep(0.5)

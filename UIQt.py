@@ -1,5 +1,7 @@
 import os
 import sys
+
+from PyQt6.QtCore import QSize
 from PyQt6.QtWidgets import QMainWindow, QTextEdit, QApplication, QGridLayout, QLabel, QWidget, QFileDialog
 from PyQt6.QtGui import QIcon, QAction
 from qt_material import apply_stylesheet
@@ -37,6 +39,12 @@ class MainWindow(QMainWindow):
         exitAct.setStatusTip('Exit application')
         exitAct.triggered.connect(self.close)
 
+        # create a set waveform action
+        setAct = QAction(QIcon('icon/sinusoid.svg'), 'Set', self)
+        setAct.setShortcut('Ctrl+W')
+        setAct.setStatusTip('Set the waveform generator')
+        setAct.triggered.connect(self.setWaveShape)
+
         # create a run action
         runAct = QAction(QIcon('icon/run.svg'), 'Run', self)
         runAct.setShortcut('Ctrl+R')
@@ -59,7 +67,9 @@ class MainWindow(QMainWindow):
 
         # init a toolbar
         toolbar = self.addToolBar('Exit')
+        toolbar.setIconSize(QSize(30, 30))
         toolbar.addAction(exitAct)
+        toolbar.addAction(setAct)
         toolbar.addAction(runAct)
         toolbar.addAction(downloadAct)
 
@@ -81,6 +91,11 @@ class MainWindow(QMainWindow):
         self.setGeometry(300, 300, 950, 650)
         self.setWindowTitle('Main window')
 
+    def setWaveShape(self):
+        self.handler.setFunGen(self.widget_top_left.waveShape, self.widget_top_left.amplitude,
+                               self.widget_top_left.frequency,
+                               self.widget_top_left.modulation)
+
     def run(self):
         if self.widget_top_left.mode == 1:
             self.run_waveform()
@@ -97,7 +112,8 @@ class MainWindow(QMainWindow):
     def run_waveform(self):
         print('running waveform')
         # capture the waveform of the scope and store them into the .csv file
-        self.handler.waveform(self.widget_top_left.amplitude, self.widget_top_left.frequency,
+        self.handler.waveform(self.widget_top_left.waveShape, self.widget_top_left.amplitude,
+                              self.widget_top_left.frequency,
                               self.widget_top_left.modulation)
         # plot the .csv file
         # measure the value and display

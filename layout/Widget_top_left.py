@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QWidget, QLabel, QGridLayout, QVBoxLayout, QComboBox, QLineEdit
+from PyQt6.QtWidgets import QWidget, QLabel, QGridLayout, QVBoxLayout, QComboBox, QLineEdit, QHBoxLayout, QPushButton
 
 
 class Widget_top_left(QWidget):
@@ -14,18 +14,21 @@ class Widget_top_left(QWidget):
         self.title.setStyleSheet("QLabel{font-size:14px;font-weight:bold;}")
 
         self.grid = QVBoxLayout()
+        self.subgridUp = QHBoxLayout()
         self.subgrid = QGridLayout()
         self.amplitude = 0.0  # default value is 0 V
         self.frequency = 1000.0  # default value is 1000 Hz
         self.interval = 1.0  # default value
         self.mode = 1  # default mode is the first mode
         self.modulation = 0  # default modulation mode is off
+        self.waveShape = 0  # default waveShape is sin shape
 
         self.initUI()
 
     def initUI(self):
         # five settings
         mode = QLabel('Mode:')
+        shape = QLabel('Wave Shape:')
         amplitude = QLabel('Amplitude (Vpp):')
         frequency = QLabel('Frequency (Hz):')
         interval = QLabel('Interval (Volts):')
@@ -50,6 +53,15 @@ class Widget_top_left(QWidget):
         combo_mode.textActivated[str].connect(self.modeSelected)
         combo_mode.setMaximumWidth(self.width() * 0.27)
 
+        # Drop down menu for wave shape selection
+        combo_shape = QComboBox(self)
+        combo_shape.addItem('Sine')
+        combo_shape.addItem('Square')
+        combo_shape.addItem('Ramp')
+        combo_shape.addItem('Pulse')
+        combo_shape.textActivated[str].connect(self.shapeSelected)
+        combo_shape.setMaximumWidth(self.width() * 0.27)
+
         # Text input for interval setting
         qle_interval = QLineEdit(self)
         qle_interval.textChanged[str].connect(self.intervalChanged)
@@ -63,18 +75,22 @@ class Widget_top_left(QWidget):
         combo_modulation.setMaximumWidth(self.width() * 0.27)
 
         self.grid.setSpacing(10)
-        self.grid.addWidget(self.title)
+        self.grid.addLayout(self.subgridUp)
+        self.subgridUp.addWidget(self.title)
         self.grid.addLayout(self.subgrid)
         self.subgrid.addWidget(mode, 0, 0)
         self.subgrid.addWidget(combo_mode, 0, 1)
-        self.subgrid.addWidget(amplitude, 1, 0)
-        self.subgrid.addWidget(qle_amplitude, 1, 1)
-        self.subgrid.addWidget(frequency, 2, 0)
-        self.subgrid.addWidget(qle_frequency, 2, 1)
-        self.subgrid.addWidget(interval, 3, 0)
-        self.subgrid.addWidget(qle_interval, 3, 1)
-        self.subgrid.addWidget(modulation, 4, 0)
-        self.subgrid.addWidget(combo_modulation, 4, 1)
+        self.subgrid.addWidget(shape, 1, 0)
+        self.subgrid.addWidget(combo_shape, 1, 1)
+        self.subgrid.addWidget(amplitude, 2, 0)
+        self.subgrid.addWidget(qle_amplitude, 2, 1)
+        self.subgrid.addWidget(frequency, 3, 0)
+        self.subgrid.addWidget(qle_frequency, 3, 1)
+        self.subgrid.addWidget(interval, 4, 0)
+        self.subgrid.addWidget(qle_interval, 4, 1)
+        self.subgrid.addWidget(modulation, 5, 0)
+        self.subgrid.addWidget(combo_modulation, 5, 1)
+        self.grid.addStretch(1)
 
         self.setLayout(self.grid)
 
@@ -112,3 +128,14 @@ class Widget_top_left(QWidget):
             self.modulation = 0
         elif text == 'On':
             self.modulation = 1
+
+    def shapeSelected(self, text):
+        if text == 'Sine':
+            self.waveShape = 0
+        elif text == 'Square':
+            self.waveShape = 1
+        elif text == 'Ramp':
+            self.waveShape = 2
+        elif text == 'Pulse':
+            self.waveShape = 3
+

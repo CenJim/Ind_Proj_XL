@@ -26,4 +26,5 @@ class Widget_bottom_right(QWidget):
         self.setLayout(self.grid)
 
     def plot(self, data):
+        self.graphWidget.clear()
         self.graphWidget.plot(data[0], data[1])
