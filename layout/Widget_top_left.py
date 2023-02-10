@@ -22,6 +22,7 @@ class Widget_top_left(QWidget):
         self.mode = 1  # default mode is the first mode
         self.modulation = 0  # default modulation mode is off
         self.waveShape = 0  # default waveShape is sin shape
+        self.angle = 0 # default angle is 0
 
         self.initUI()
 
@@ -33,25 +34,30 @@ class Widget_top_left(QWidget):
         frequency = QLabel('Frequency (Hz):')
         interval = QLabel('Interval (Volts):')
         modulation = QLabel('Amplitude Modulation:')
+        angle = QLabel('Angle:')
 
         # text input for voltage setting
         qle_amplitude = QLineEdit(self)
         qle_amplitude.textChanged[str].connect(self.amplitudeChanged)
         qle_amplitude.setMaximumWidth(self.width() * 0.27)
+        qle_amplitude.setMaximumHeight(self.height() * 0.05)
 
         # text input for frequency setting
         qle_frequency = QLineEdit("1000", self)
         qle_frequency.textChanged[str].connect(self.frequencyChanged)
         qle_frequency.setMaximumWidth(self.width() * 0.27)
+        qle_frequency.setMaximumHeight(self.height() * 0.05)
 
         # Drop down menu for mode setting
         combo_mode = QComboBox(self)
         combo_mode.addItem('Waveform')
         combo_mode.addItem('Draw Fgen-Osc')
+        combo_mode.addItem('Draw Angle-Osc')
         combo_mode.addItem('Square Waveform')
         combo_mode.addItem('Triangle Waveform')
         combo_mode.textActivated[str].connect(self.modeSelected)
         combo_mode.setMaximumWidth(self.width() * 0.27)
+        combo_mode.setMaximumHeight(self.height() * 0.05)
 
         # Drop down menu for wave shape selection
         combo_shape = QComboBox(self)
@@ -61,11 +67,13 @@ class Widget_top_left(QWidget):
         combo_shape.addItem('Pulse')
         combo_shape.textActivated[str].connect(self.shapeSelected)
         combo_shape.setMaximumWidth(self.width() * 0.27)
+        combo_shape.setMaximumHeight(self.height() * 0.05)
 
         # Text input for interval setting
         qle_interval = QLineEdit(self)
         qle_interval.textChanged[str].connect(self.intervalChanged)
         qle_interval.setMaximumWidth(self.width() * 0.27)
+        qle_interval.setMaximumHeight(self.height() * 0.05)
 
         # Drop down menu for modulation setting
         combo_modulation = QComboBox(self)
@@ -73,6 +81,13 @@ class Widget_top_left(QWidget):
         combo_modulation.addItem('On')
         combo_modulation.textActivated[str].connect(self.modulationSelected)
         combo_modulation.setMaximumWidth(self.width() * 0.27)
+        combo_modulation.setMaximumHeight(self.height() * 0.05)
+
+        # Text input for angle setting
+        qle_angle = QLineEdit(self)
+        qle_angle.textChanged[str].connect(self.angleChanged)
+        qle_angle.setMaximumWidth(self.width() * 0.27)
+        qle_angle.setMaximumHeight(self.height() * 0.05)
 
         self.grid.setSpacing(10)
         self.grid.addLayout(self.subgridUp)
@@ -90,6 +105,8 @@ class Widget_top_left(QWidget):
         self.subgrid.addWidget(qle_interval, 4, 1)
         self.subgrid.addWidget(modulation, 5, 0)
         self.subgrid.addWidget(combo_modulation, 5, 1)
+        self.subgrid.addWidget(angle, 6, 0)
+        self.subgrid.addWidget(qle_angle, 6, 1)
         self.grid.addStretch(1)
 
         self.setLayout(self.grid)
@@ -104,6 +121,8 @@ class Widget_top_left(QWidget):
             self.mode = 3
         elif text == 'Triangle Waveform':
             self.mode = 4
+        elif text == 'Draw Angle-Osc':
+            self.mode = 5
 
     def intervalChanged(self, text):
         try:
@@ -138,4 +157,10 @@ class Widget_top_left(QWidget):
             self.waveShape = 2
         elif text == 'Pulse':
             self.waveShape = 3
+
+    def angleChanged(self, text):
+        try:
+            self.angle = float(text)
+        except Exception as ex:
+            print('angle is not a float')
 

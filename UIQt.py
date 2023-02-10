@@ -57,6 +57,17 @@ class MainWindow(QMainWindow):
         downloadAct.setStatusTip('Download the csv data')
         downloadAct.triggered.connect(lambda: self.download_data())
 
+        # Add measurement data action
+        addAct = QAction(QIcon('icon/add.svg'), 'Add Data', self)
+        addAct.setShortcut('+')
+        addAct.setStatusTip('Add a measurement data')
+        addAct.triggered.connect(lambda: self.add_data())
+
+        # Add reset data action
+        resetAct = QAction(QIcon('icon/refresh.svg'), 'Reset Data', self)
+        resetAct.setStatusTip('Reset the stored data')
+        resetAct.triggered.connect(lambda: self.reset_data())
+
         # init a statusbar
         self.statusBar()
 
@@ -70,8 +81,10 @@ class MainWindow(QMainWindow):
         toolbar.setIconSize(QSize(30, 30))
         toolbar.addAction(exitAct)
         toolbar.addAction(setAct)
+        toolbar.addAction(addAct)
         toolbar.addAction(runAct)
         toolbar.addAction(downloadAct)
+        toolbar.addAction(resetAct)
 
         # init a central widget
         central_widget = QWidget()
@@ -105,6 +118,8 @@ class MainWindow(QMainWindow):
             self.run_square()
         elif self.widget_top_left.mode == 4:
             self.run_triangle()
+        elif self.widget_top_left.mode == 5:
+            self.run_angle_osc()
 
     def download_data(self):
         file_path = QFileDialog.getOpenFileNames(self, "Download Data", os.getcwd() + "/data", "Csv files(*.csv)")
@@ -159,6 +174,17 @@ class MainWindow(QMainWindow):
         # draw the waveform
         self.widget_bottom_left.plot()
 
+    def run_angle_osc(self):
+        print('running draw angle_osc')
+        result = self.handler.run_angle_osc()
+        self.widget_bottom_right.plot(result)
+
+    def add_data(self):
+        if self.widget_top_left.mode == 5:
+            self.handler.add_data(self.widget_top_left.angle)
+
+    def reset_data(self):
+        self.handler.reset_data()
 
 def mainWindow(handler):
     app = QApplication(sys.argv)

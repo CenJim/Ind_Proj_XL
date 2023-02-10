@@ -9,6 +9,9 @@ class Handler:
     def __init__(self, osc, fgen):
         self.osc = osc
         self.fgen = fgen
+        self.angle = []
+        self.angle_Vosc = [[], [], [], [], [], []]
+        self.angle_flag = 0
 
     # "1" is on, others are off
     def fgen_ch1_switch(self, flag):
@@ -121,24 +124,49 @@ class Handler:
         self.fgen.ch1.set_amplitude(amplitude)
         self.fgen.ch1.set_AM(modulation)
 
+    def run_angle_osc(self):
+        if self.angle_flag == 1:
+            dataFrame = pd.DataFrame({'angle': self.angle, 'Vosc_0': self.angle_Vosc[0], 'Vosc_1': self.angle_Vosc[1],
+                                      'Vosc_2': self.angle_Vosc[2], 'Vosc_3': self.angle_Vosc[3],
+                                      'Vosc_4': self.angle_Vosc[4], 'Average': self.angle_Vosc[5]})
+            dataFrame.to_csv('data/angle_osc_data.csv', index=True, sep=',')
+            return np.array([self.angle, self.angle_Vosc[5]])
+
+    def add_data(self, angle):
+        if self.angle_flag == 0:
+            self.angle = []
+            self.angle_Vosc = [[], [], [], [], [], []]
+            self.angle_flag = 1
+            self.angle.append(angle)
+            cur = []
+            for i in range(5):
+                value = self.osc.measure_DC_Vrms()
+                # wait for the scope to set
+                time.sleep(0.5)
+                self.angle_Vosc[i].append(value)
+                cur.append(value)
+            result = self.IQR(cur)  # remove the outliers
+            avg = np.mean(result)
+            self.angle_Vosc[5].append(avg)
+        else:
+            self.angle.append(angle)
+            cur = []
+            for i in range(5):
+                value = self.osc.measure_DC_Vrms()
+                # wait for the scope to set
+                time.sleep(0.5)
+                self.angle_Vosc[i].append(value)
+                cur.append(value)
+            result = self.IQR(cur)  # remove the outliers
+            avg = np.mean(result)
+            self.angle_Vosc[5].append(avg)
+
+    def reset_data(self):
+        self.angle_flag = 0
+
     def capture(self):
         self.osc.capture_DC()
         self.osc.analyze_waveform()
-
-    def three_sigma(self, ser1):
-        # 求平均值
-        mean_value = ser1.mean()
-        # 求标准差
-        std_value = ser1.std()
-        # 位于(μ-3σ,μ+3σ)区间的数据是正常的，不在这个区间的数据为异常的
-        # ser1中的数值小于μ-3σ或大于μ+3σ均为异常值
-        min = mean_value - 3 * std_value
-        max = mean_value + 3 * std_value
-        outrange = []
-        for i in ser1:
-            if (i > max) or (i < min):
-                outrange.append(i)
-        return outrange
 
     def IQR(self, numbers):
         numbers = sorted(numbers)
