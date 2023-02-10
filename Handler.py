@@ -1,6 +1,8 @@
 import time
+from statistics import quantiles
 
 import numpy as np
+import pandas as pd
 
 
 class Handler:
@@ -42,7 +44,6 @@ class Handler:
         self.fgen.ch1.set_amplitude(amplitude)
         self.fgen_ch1_switch(1)
 
-
     # for the draw waveform experiment
     def waveform(self, waveShape: int, amplitude, frequency, modulation: int):
         self.fgen.ch1.set_AM(modulation)
@@ -72,26 +73,37 @@ class Handler:
         self.fgen.ch1.set_offset(0)
         self.fgen.ch1.set_amplitude(0.5)
         self.fgen_ch1_switch(1)
-        #self.osc.capture_DC()
+        # self.osc.capture_DC()
         i = 0
         Vgen = []
-        Vosc = []
+        Vosc = [[], [], [], [], [], []]
         for amplitude_vpp in np.arange(0.5, 20, interval):
             self.fgen.ch1.set_amplitude(amplitude_vpp)
             # wait for the function generator to set
             time.sleep(0.5)
-            #self.osc.capture_DC()
-            Vosc.append(self.osc.measure_DC_Vrms())
-            # wait for the scope to set
-            time.sleep(0.5)
+            # self.osc.capture_DC()
+            cur = []
+            for i in range(5):
+                value = self.osc.measure_DC_Vrms()
+                # wait for the scope to set
+                time.sleep(0.5)
+                Vosc[i].append(value)
+                cur.append(value)
+            result = self.IQR(cur)  # remove the outliers
+            avg = np.mean(result)
+            Vosc[5].append(avg)
             Vgen.append(amplitude_vpp)
         print(Vgen)
         print(Vosc)
-        f = open("data/fgen_osc_data.csv", "w")
-        for i in range(0, len(Vgen) - 1):
-            f.write("%f, %f\n" % (Vgen[i], Vosc[i]))
-        f.close()
-        return np.array([Vgen, Vosc])
+        dataFrame = pd.DataFrame(
+            {'fgen': Vgen, 'Vosc_0': Vosc[0], 'Vosc_1': Vosc[1], 'Vosc_2': Vosc[2], 'Vosc_3': Vosc[3],
+             'Vosc_4': Vosc[4], 'Average': Vosc[5]})
+        dataFrame.to_csv('data/fgen_osc_data.csv', index=True, sep=',')
+        # f = open("data/fgen_osc_data.csv", "w")
+        # for i in range(0, len(Vgen) - 1):
+        #     f.write("%f, %f\n" % (Vgen[i], Vosc[0][i]))
+        # f.close()
+        return np.array([Vgen, Vosc[5]])
 
     def run_square(self, amplitude, frquency, modulation: int):
         self.fgen_ch2_switch(0)
@@ -112,3 +124,26 @@ class Handler:
     def capture(self):
         self.osc.capture_DC()
         self.osc.analyze_waveform()
+
+    def three_sigma(self, ser1):
+        # 求平均值
+        mean_value = ser1.mean()
+        # 求标准差
+        std_value = ser1.std()
+        # 位于(μ-3σ,μ+3σ)区间的数据是正常的，不在这个区间的数据为异常的
+        # ser1中的数值小于μ-3σ或大于μ+3σ均为异常值
+        min = mean_value - 3 * std_value
+        max = mean_value + 3 * std_value
+        outrange = []
+        for i in ser1:
+            if (i > max) or (i < min):
+                outrange.append(i)
+        return outrange
+
+    def IQR(self, numbers):
+        numbers = sorted(numbers)
+        result = quantiles(numbers)
+        IQR = result[2] - result[0]
+        lower_bound = result[0] - 0.3 * IQR
+        upper_bound = result[2] + 0.3 * IQR
+        return [n for n in numbers if lower_bound <= n <= upper_bound]
