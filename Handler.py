@@ -110,7 +110,7 @@ class Handler:
 
     def run_square(self, amplitude, frquency, modulation: int):
         self.fgen_ch2_switch(0)
-        self.fgen.ch1.set_function("SQU")
+        self.fgen.ch1.set_function("SIN")
         self.fgen.ch1.set_frequency(frquency, unit="Hz")
         self.fgen.ch1.set_offset(0)
         self.fgen.ch1.set_amplitude(amplitude)
@@ -165,7 +165,7 @@ class Handler:
         self.angle_flag = 0
 
     def capture(self):
-        self.osc.capture_DC()
+        # self.osc.capture_DC()
         self.osc.analyze_waveform()
 
     def IQR(self, numbers):
@@ -175,3 +175,52 @@ class Handler:
         lower_bound = result[0] - 0.3 * IQR
         upper_bound = result[2] + 0.3 * IQR
         return [n for n in numbers if lower_bound <= n <= upper_bound]
+
+    def rising_time(self):
+        df = pd.read_csv('data/waveform_data.csv')
+
+        # Pre-process the waveform data
+        data = np.array(df.iloc[:, 1])
+        print('mean data: ', np.mean(data))
+        data = data - np.mean(data)
+        data = data[:24800]
+        N = 50
+        # downsample the data
+        data = np.mean(data.reshape(-1, N), axis=1)
+
+        # Calculate the derivative of the waveform
+        derivative = np.gradient(data)
+
+        # Define the threshold value
+        threshold = np.std(derivative)
+        print('threshold: ', threshold)
+
+        # Identify the start time of the rising edge
+        start_time = None
+        for i, value in enumerate(derivative):
+            if value > threshold and start_time is None:
+                start_time = i
+                break
+        print('start time: ', start_time)
+
+        # Find the end time of the rising edge
+        end_time = None
+        stable_flag = 0
+        for i, value in enumerate(derivative[start_time:]):
+            if -threshold / 10 < value < threshold / 10:
+                end_time = start_time + i
+                for j, value2 in enumerate(derivative[end_time:end_time + 10]):
+                    if -threshold / 10 < value2 < threshold / 10:
+                        stable_flag = 1
+                    else:
+                        stable_flag = 0
+                        break
+                if stable_flag == 1:
+                    break
+
+        print('end time: ', end_time)
+
+        # Calculate the rising time
+        rising_time = (end_time - start_time) * 50 / 12500
+        print('rising time: ', rising_time, 's')
+        return rising_time

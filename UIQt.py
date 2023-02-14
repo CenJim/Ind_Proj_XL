@@ -157,6 +157,7 @@ class MainWindow(QMainWindow):
         self.widget_top_right.setVmax(self.handler.osc.measure_Vmax())
         self.widget_top_right.setFrequency(self.handler.osc.measure_frequency())
         self.widget_top_right.setPeriod(self.handler.osc.measure_period())
+        self.widget_top_right.setResponse(self.handler.rising_time() * 1000)
         # draw the waveform
         self.widget_bottom_left.plot()
 
