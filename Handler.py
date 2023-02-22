@@ -12,6 +12,11 @@ class Handler:
         self.angle = []
         self.angle_Vosc = [[], [], [], [], [], []]
         self.angle_flag = 0
+        self.pause = 0
+        self.Vgen = []
+        self.Vosc = [[], [], [], [], [], []]
+        self.fgen_osc_result = np.array([])
+        self.fgen_osc_done = 0
 
     # "1" is on, others are off
     def fgen_ch1_switch(self, flag):
@@ -70,6 +75,7 @@ class Handler:
 
     # for the fgen_osc experiment
     def draw_Vgen_Vosc_chart(self, interval, frequency):
+        self.fgen_osc_done = 0
         self.fgen_ch2_switch(0)
         self.fgen.ch1.set_function("SIN")
         self.fgen.ch1.set_frequency(frequency, unit="Hz")
@@ -78,35 +84,41 @@ class Handler:
         self.fgen_ch1_switch(1)
         # self.osc.capture_DC()
         i = 0
-        Vgen = []
-        Vosc = [[], [], [], [], [], []]
-        for amplitude_vpp in np.arange(0.5, 20, interval):
+        self.Vgen = []
+        self.Vosc = [[], [], [], [], [], []]
+        for amplitude_vpp in np.arange(0.1, 20, interval):
+            while self.pause == 1:
+                time.sleep(1)
+            print('pause: ', self.pause)
             self.fgen.ch1.set_amplitude(amplitude_vpp)
             # wait for the function generator to set
-            time.sleep(0.5)
+            time.sleep(1)
             # self.osc.capture_DC()
             cur = []
+            self.Vgen.append(amplitude_vpp)
             for i in range(5):
                 value = self.osc.measure_DC_Vrms()
                 # wait for the scope to set
                 time.sleep(0.5)
-                Vosc[i].append(value)
+                self.Vosc[i].append(value)
                 cur.append(value)
             result = self.IQR(cur)  # remove the outliers
             avg = np.mean(result)
-            Vosc[5].append(avg)
-            Vgen.append(amplitude_vpp)
-        print(Vgen)
-        print(Vosc)
-        dataFrame = pd.DataFrame(
-            {'fgen': Vgen, 'Vosc_0': Vosc[0], 'Vosc_1': Vosc[1], 'Vosc_2': Vosc[2], 'Vosc_3': Vosc[3],
-             'Vosc_4': Vosc[4], 'Average': Vosc[5]})
-        dataFrame.to_csv('data/fgen_osc_data.csv', index=True, sep=',')
+            self.Vosc[5].append(avg)
+        print(self.Vgen)
+        print(self.Vosc)
+        vgen_vosc_dataframe = pd.DataFrame(
+            {'fgen': self.Vgen, 'Vosc_0': self.Vosc[0], 'Vosc_1': self.Vosc[1], 'Vosc_2': self.Vosc[2],
+             'Vosc_3': self.Vosc[3], 'Vosc_4': self.Vosc[4], 'Average': self.Vosc[5]}
+            # {'fgen': Vgen, 'Vosc_0': Vosc[0], 'Vosc_1': Vosc[1], 'Vosc_2': Vosc[2]}
+        )
+        vgen_vosc_dataframe.to_csv('data/fgen_osc_data.csv', index=True, sep=',')
         # f = open("data/fgen_osc_data.csv", "w")
         # for i in range(0, len(Vgen) - 1):
         #     f.write("%f, %f\n" % (Vgen[i], Vosc[0][i]))
         # f.close()
-        return np.array([Vgen, Vosc[5]])
+        self.fgen_osc_result = np.array([self.Vgen, self.Vosc[5]])
+        self.fgen_osc_done = 1
 
     def run_square(self, amplitude, frquency, modulation: int):
         self.fgen_ch2_switch(0)
