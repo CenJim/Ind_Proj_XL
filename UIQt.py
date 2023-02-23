@@ -36,9 +36,10 @@ class MainWindow(QMainWindow):
             self.handler = handler
             self.handler.osc_connect()
 
-        self.fgen_osc_dataWindow = Fgen_osc_DataWindow()
+        self.fgen_osc_dataWindow = Fgen_osc_DataWindow(self.widget_top_left.data_volume)
 
         self.initUI()
+        self.resize(1600, 900)
 
     def initUI(self):
         # create an exit action
@@ -165,9 +166,13 @@ class MainWindow(QMainWindow):
 
     def run_fgen_osc(self):
         print('running draw fgen_osc')
+        self.fgen_osc_dataWindow.data_volume = self.widget_top_left.data_volume
         self.fgen_osc_dataWindow.show()
         t1 = threading.Thread(target=self.handler.draw_Vgen_Vosc_chart,
-                              args=(self.widget_top_left.interval, self.widget_top_left.frequency))
+                              args=(self.widget_top_left.interval, self.widget_top_left.frequency,
+                                    self.widget_top_left.data_volume, self.widget_top_left.wait_time,
+                                    self.widget_top_left.fgen_osc_lower_limit,
+                                    self.widget_top_left.fgen_osc_upper_limit))
         t2 = threading.Thread(target=self.showData)
         t3 = threading.Thread(target=self.plot_fgen_osc)
         t1.start()
@@ -207,6 +212,7 @@ class MainWindow(QMainWindow):
     def plot_fgen_osc(self):
         while self.handler.fgen_osc_done == 0:
             continue
+        print('Plot!')
         self.widget_bottom_right.plot(self.handler.fgen_osc_result)
 
     def run_square(self):
@@ -252,9 +258,10 @@ class MainWindow(QMainWindow):
 
 
 class Fgen_osc_DataWindow(QTableWidget):
-    def __init__(self):
+    def __init__(self, data_volume):
         super().__init__()
         self.initUI()
+        self.data_volume = data_volume
 
     def initUI(self):
         self.setWindowTitle('Data')
@@ -268,9 +275,11 @@ class Fgen_osc_DataWindow(QTableWidget):
             self.setItem(i, 0, QTableWidgetItem(str(vgen[i])))
 
     def updateVosc(self, vosc):
-        for col in range(len(vosc)):
+        for col in range(self.data_volume):
             for row in range(len(vosc[col])):
-                self.setItem(row, col+1, QTableWidgetItem(str(vosc[col][row])))
+                self.setItem(row, col + 1, QTableWidgetItem(str(vosc[col][row])))
+        for row in range(len(vosc[self.data_volume])):
+            self.setItem(row, 6, QTableWidgetItem(str(vosc[self.data_volume][row])))
 
 
 def mainWindow(handler):

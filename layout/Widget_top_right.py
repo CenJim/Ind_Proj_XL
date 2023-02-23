@@ -54,7 +54,7 @@ class Widget_top_right(QWidget):
         self.period_value.setStyleSheet("background-color: #232629; border: 1px inset #232629; min-height: 20px;")
         self.period_value.setMaximumWidth(self.width() * 0.2)
 
-        self.grid.setSpacing(10)
+        self.grid.setSpacing(23)
         self.grid.addWidget(self.title)
         self.grid.addLayout(self.subgrid)
         self.subgrid.addWidget(self.response, 0, 0)
