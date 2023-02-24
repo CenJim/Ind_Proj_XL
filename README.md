@@ -10,8 +10,10 @@ Used python and Raspberry Pi Pico to control the motor. The motor can rotate the
 
 ### Known issues
 Only compatible with AFG-1022 and Keysight InfiniiVision 2000 X-Series Oscilloscope.
+
 Work will with: Python 3.9.13, PyQt 6.4.0.
-Other version still need to test.
+
+Still need to test other version.
 
 ### Newest User Interface
-![](http://github.com/CenJim/Ind_Proj_XL/blob/master/pictures/UI2_24.png)
+![](https://raw.githubusercontent.com/CenJim/Ind_Proj_XL/master/pictures/UI2_24.png)
