@@ -37,12 +37,12 @@ class Widget_top_left(QWidget):
         shape = QLabel('Wave Shape:')
         amplitude = QLabel('Amplitude (Vpp):')
         frequency = QLabel('Frequency (Hz):')
-        interval = QLabel('Interval (Volts):')
+        interval = QLabel('Interval (Volts/Degree):')
         modulation = QLabel('Amplitude Modulation:')
         angle = QLabel('Angle:')
         data_volume = QLabel('Data Volume (0~5):')
-        wait_time = QLabel('Wait Time:')
-        fgen_osc_range = QLabel('Range:')
+        wait_time = QLabel('Wait Time (s):')
+        fgen_osc_range = QLabel('Range (Volts/Degree):')
 
         # text input for voltage setting
         qle_amplitude = QLineEdit(self)
@@ -61,6 +61,7 @@ class Widget_top_left(QWidget):
         combo_mode.addItem('Waveform')
         combo_mode.addItem('Draw Fgen-Osc')
         combo_mode.addItem('Draw Angle-Osc')
+        combo_mode.addItem('Auto Angle-Osc')
         combo_mode.addItem('Square Waveform')
         combo_mode.addItem('Triangle Waveform')
         combo_mode.textActivated[str].connect(self.modeSelected)
@@ -168,6 +169,8 @@ class Widget_top_left(QWidget):
             self.mode = 4
         elif text == 'Draw Angle-Osc':
             self.mode = 5
+        elif text == 'Auto Angle-Osc':
+            self.mode = 6
 
     def intervalChanged(self, text):
         try:
@@ -183,8 +186,8 @@ class Widget_top_left(QWidget):
 
     def fgenOscLowerChanged(self, text):
         try:
-            if float(text) < 0.1 or float(text) >= 20:
-                print('Lower limit value should between 0.1 and 20')
+            if float(text) < 0 or float(text) > 360:
+                print('Lower limit value should between 0 and 360')
             else:
                 self.fgen_osc_lower_limit = float(text)
         except Exception as ex:
@@ -192,7 +195,7 @@ class Widget_top_left(QWidget):
 
     def fgenOscUpperChanged(self, text):
         try:
-            if float(text) < 0.1 or float(text) >= 20:
+            if float(text) < 0 or float(text) > 360:
                 print('Upper limit value should between 0.1 and 20')
             else:
                 self.fgen_osc_upper_limit = float(text)

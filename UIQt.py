@@ -37,6 +37,7 @@ class MainWindow(QMainWindow):
             self.handler.osc_connect()
 
         self.fgen_osc_dataWindow = Fgen_osc_DataWindow(self.widget_top_left.data_volume)
+        self.angle_osc_dataWindow = Angle_osc_DataWindow(self.widget_top_left.data_volume)
 
         self.initUI()
         self.resize(1600, 900)
@@ -136,6 +137,8 @@ class MainWindow(QMainWindow):
             self.run_triangle()
         elif self.widget_top_left.mode == 5:
             self.run_angle_osc()
+        elif self.widget_top_left.mode == 6:
+            self.run_auto_angle_osc()
 
     def pause(self):
         if self.handler.pause == 0:
@@ -173,7 +176,7 @@ class MainWindow(QMainWindow):
                                     self.widget_top_left.data_volume, self.widget_top_left.wait_time,
                                     self.widget_top_left.fgen_osc_lower_limit,
                                     self.widget_top_left.fgen_osc_upper_limit))
-        t2 = threading.Thread(target=self.showData)
+        t2 = threading.Thread(target=self.showData, args=[self.fgen_osc_dataWindow])
         t3 = threading.Thread(target=self.plot_fgen_osc)
         t1.start()
         t2.start()
@@ -183,11 +186,11 @@ class MainWindow(QMainWindow):
         # result = np.array([(0, 1, 2, 3), (0, 1, 2, 3)])
         # self.widget_bottom_right.plot(self.handler.fgen_osc_result)
 
-    def showData(self):
+    def showData(self, dataWindow):
         vgen = copy.deepcopy(self.handler.Vgen)
         vosc = copy.deepcopy(self.handler.Vosc)
         count = 0
-        self.fgen_osc_dataWindow.clearContents()
+        dataWindow.clearContents()
         while True:
             # print('vgen: ', vgen)
             # print('self.handler.Vgen: ', self.handler.Vgen)
@@ -195,11 +198,37 @@ class MainWindow(QMainWindow):
                 print('update!')
                 count = 0
                 vgen = copy.deepcopy(self.handler.Vgen)
-                self.fgen_osc_dataWindow.updateVgen(vgen)
+                dataWindow.updateVgen(vgen)
             elif self.handler.Vosc != vosc:
                 count = 0
                 vosc = copy.deepcopy(self.handler.Vosc)
-                self.fgen_osc_dataWindow.updateVosc(vosc)
+                dataWindow.updateVosc(vosc)
+            else:
+                count = count + 1
+            if count > 50:
+                print('show data end')
+                break
+            time.sleep(0.1)
+            while self.handler.pause == 1:
+                time.sleep(1)
+
+    def showData_angle(self, dataWindow):
+        angle = copy.deepcopy(self.handler.angle)
+        angle_vosc = copy.deepcopy(self.handler.angle_Vosc)
+        count = 0
+        dataWindow.clearContents()
+        while True:
+            # print('vgen: ', vgen)
+            # print('self.handler.Vgen: ', self.handler.Vgen)
+            if self.handler.angle != angle:
+                print('update!')
+                count = 0
+                angle = copy.deepcopy(self.handler.angle)
+                dataWindow.updateVgen(angle)
+            elif self.handler.angle_Vosc != angle_vosc:
+                count = 0
+                angle_vosc = copy.deepcopy(self.handler.angle_Vosc)
+                dataWindow.updateVosc(angle_vosc)
             else:
                 count = count + 1
             if count > 50:
@@ -214,6 +243,12 @@ class MainWindow(QMainWindow):
             continue
         print('Plot!')
         self.widget_bottom_right.plot(self.handler.fgen_osc_result)
+
+    def plot_angle_osc(self):
+        while self.handler.angle_osc_done == 0:
+            continue
+        print('Plot!')
+        self.widget_bottom_right.plot(self.handler.angle_osc_result)
 
     def run_square(self):
         print('running square')
@@ -249,6 +284,21 @@ class MainWindow(QMainWindow):
         result = self.handler.run_angle_osc()
         self.widget_bottom_right.plot(result)
 
+    def run_auto_angle_osc(self):
+        print('running auto angle_osc')
+        self.angle_osc_dataWindow.data_volume = self.widget_top_left.data_volume
+        self.angle_osc_dataWindow.show()
+        t1 = threading.Thread(target=self.handler.auto_angle_osc,
+                              args=(self.widget_top_left.interval, self.widget_top_left.amplitude,
+                                    self.widget_top_left.frequency, self.widget_top_left.data_volume,
+                                    self.widget_top_left.wait_time, self.widget_top_left.fgen_osc_lower_limit,
+                                    self.widget_top_left.fgen_osc_upper_limit))
+        t2 = threading.Thread(target=self.showData_angle, args=[self.angle_osc_dataWindow])
+        t3 = threading.Thread(target=self.plot_angle_osc)
+        t1.start()
+        t2.start()
+        t3.start()
+
     def add_data(self):
         if self.widget_top_left.mode == 5:
             self.handler.add_data(self.widget_top_left.angle)
@@ -269,6 +319,42 @@ class Fgen_osc_DataWindow(QTableWidget):
         self.setRowCount(1000)
         self.setColumnCount(7)
         self.setHorizontalHeaderLabels(['Fgen', 'V0', 'V1', 'V2', 'V3', 'V4', 'Vavg'])
+
+    def updateVgen(self, vgen):
+        for i in range(len(vgen)):
+            self.setItem(i, 0, QTableWidgetItem(str(vgen[i])))
+
+    def updateVosc(self, vosc):
+        for col in range(self.data_volume):
+            for row in range(len(vosc[col])):
+                self.setItem(row, col + 1, QTableWidgetItem(str(vosc[col][row])))
+        for row in range(len(vosc[self.data_volume])):
+            self.setItem(row, 6, QTableWidgetItem(str(vosc[self.data_volume][row])))
+
+    # def updateAngle(self, angle):
+    #     for i in range(len(angle)):
+    #         self.setItem(i, 0, QTableWidgetItem(str(angle[i])))
+    #
+    # def updateAngleVosc(self, angle_vosc):
+    #     for col in range(self.data_volume):
+    #         for row in range(len(angle_vosc[col])):
+    #             self.setItem(row, col + 1, QTableWidgetItem(str(angle_vosc[col][row])))
+    #     for row in range(len(angle_vosc[self.data_volume])):
+
+
+
+class Angle_osc_DataWindow(QTableWidget):
+    def __init__(self, data_volume):
+        super().__init__()
+        self.initUI()
+        self.data_volume = data_volume
+
+    def initUI(self):
+        self.setWindowTitle('Data')
+        self.resize(800, 500)
+        self.setRowCount(1000)
+        self.setColumnCount(7)
+        self.setHorizontalHeaderLabels(['Angle', 'V0', 'V1', 'V2', 'V3', 'V4', 'Vavg'])
 
     def updateVgen(self, vgen):
         for i in range(len(vgen)):

@@ -3,7 +3,9 @@ from statistics import quantiles
 
 import numpy as np
 import pandas as pd
+from serial import SerialException
 
+from serial_motor import SerialSender
 
 class Handler:
     def __init__(self, osc, fgen):
@@ -16,7 +18,10 @@ class Handler:
         self.Vgen = []
         self.Vosc = [[], [], [], [], [], []]
         self.fgen_osc_result = np.array([])
+        self.angle_osc_result = np.array([])
         self.fgen_osc_done = 0
+        self.angle_osc_done = 0
+        self.serial_sender = SerialSender()
 
     # "1" is on, others are off
     def fgen_ch1_switch(self, flag):
@@ -144,6 +149,81 @@ class Handler:
         self.fgen_osc_result = np.array([self.Vgen, self.Vosc[data_volume]])
         self.fgen_osc_done = 1
 
+    def auto_angle_osc(self, interval, amplitude, frequency, data_volume, wait_time, lower_limit, upper_limit):
+        self.angle_osc_done = 0
+        self.fgen_ch2_switch(0)
+        self.fgen.ch1.set_function("SIN")
+        self.fgen.ch1.set_frequency(frequency, unit="Hz")
+        self.fgen.ch1.set_offset(0)
+        self.fgen.ch1.set_amplitude(amplitude)
+        self.fgen_ch1_switch(1)
+        self.angle = []
+        self.angle_Vosc = [[], [], [], [], [], []]
+        angle_degree = 0
+        for angle_degree in np.arange(lower_limit, upper_limit, interval):
+            while self.pause == 1:
+                time.sleep(1)
+            print('pause: ', self.pause)
+            # self.fgen.ch1.set_amplitude(amplitude_vpp)
+            if int(angle_degree) == int(lower_limit):
+                self.rotate(str(int(lower_limit)))
+            else:
+                self.rotate(str(int(interval)))
+            # wait for the function generator to set
+            time.sleep(wait_time)
+            # self.osc.capture_DC()
+            cur = []
+            self.angle.append(angle_degree)
+            for i in range(data_volume):
+                value = self.osc.measure_DC_Vrms()
+                # wait for the scope to set
+                time.sleep(0.5)
+                self.angle_Vosc[i].append(value)
+                cur.append(value)
+            result = self.IQR(cur)  # remove the outliers
+            avg = np.mean(result)
+            self.angle_Vosc[data_volume].append(avg)
+        while self.pause == 1:
+            time.sleep(1)
+        print('pause: ', self.pause)
+        # self.fgen.ch1.set_amplitude(amplitude_vpp)
+        self.rotate(str(int(upper_limit - angle_degree)))
+        # wait for the function generator to set
+        time.sleep(wait_time)
+        # self.osc.capture_DC()
+        cur = []
+        self.angle.append(upper_limit)
+        for i in range(data_volume):
+            value = self.osc.measure_DC_Vrms()
+            # wait for the scope to set
+            time.sleep(0.5)
+            self.angle_Vosc[i].append(value)
+            cur.append(value)
+        result = self.IQR(cur)  # remove the outliers
+        avg = np.mean(result)
+        self.angle_Vosc[data_volume].append(avg)
+        print(self.angle)
+        print(self.angle_Vosc)
+        dataframe_format = {'angle': self.angle}
+        for num in range(data_volume):
+            dataframe_format.update({f'Vosc_{num}': self.angle_Vosc[num]})
+        dataframe_format.update({'Average': self.angle_Vosc[data_volume]})
+        vgen_vosc_dataframe = pd.DataFrame(
+            # {'fgen': self.Vgen, 'Vosc_0': self.Vosc[0], 'Vosc_1': self.Vosc[1], 'Vosc_2': self.Vosc[2],
+            #  'Vosc_3': self.Vosc[3], 'Vosc_4': self.Vosc[4], 'Average': self.Vosc[5]}
+            # {'fgen': Vgen, 'Vosc_0': Vosc[0], 'Vosc_1': Vosc[1], 'Vosc_2': Vosc[2]}
+            dataframe_format
+        )
+        vgen_vosc_dataframe.to_csv('data/angle_osc_data.csv', index=True, sep=',')
+        # f = open("data/fgen_osc_data.csv", "w")
+        # for i in range(0, len(Vgen) - 1):
+        #     f.write("%f, %f\n" % (Vgen[i], Vosc[0][i]))
+        # f.close()
+        self.angle_osc_result = np.array([self.angle, self.angle_Vosc[data_volume]])
+        self.angle_osc_done = 1
+
+
+
     def run_square(self, amplitude, frquency, modulation: int):
         self.fgen_ch2_switch(0)
         self.fgen.ch1.set_function("SIN")
@@ -260,3 +340,11 @@ class Handler:
         rising_time = (end_time - start_time) * 50 / 12500
         print('rising time: ', rising_time, 's')
         return rising_time
+
+    def rotate(self, angle: str):
+        try:
+            self.serial_sender.send(angle)
+            print(self.serial_sender.receive())
+            # self.serial_sender.close()
+        except SerialException:
+            print(SerialException)
