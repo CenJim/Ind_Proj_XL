@@ -7,8 +7,9 @@ from serial import SerialException
 
 from serial_motor import SerialSender
 
+
 class Handler:
-    def __init__(self, osc, fgen):
+    def __init__(self, osc, fgen, rasp):
         self.osc = osc
         self.fgen = fgen
         self.angle = []
@@ -21,7 +22,8 @@ class Handler:
         self.angle_osc_result = np.array([])
         self.fgen_osc_done = 0
         self.angle_osc_done = 0
-        # self.serial_sender = SerialSender()
+        if rasp != 'None':
+            self.serial_sender = SerialSender(rasp)
 
     # "1" is on, others are off
     def fgen_ch1_switch(self, flag):
@@ -237,8 +239,6 @@ class Handler:
         # f.close()
         self.angle_osc_result = np.array([self.angle, self.angle_Vosc[data_volume]])
         self.angle_osc_done = 1
-
-
 
     def run_square(self, amplitude, frquency, modulation: int):
         self.fgen_ch2_switch(0)
