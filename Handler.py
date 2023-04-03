@@ -91,6 +91,10 @@ class Handler:
         i = 0
         self.Vgen = []
         self.Vosc = [[], [], [], [], [], []]
+        if lower_limit < 0.002:
+            lower_limit = 0.002
+        if upper_limit > 20:
+            upper_limit = 20
         for amplitude_vpp in np.arange(lower_limit, upper_limit, interval):
             while self.pause == 1:
                 time.sleep(1)
@@ -104,10 +108,13 @@ class Handler:
             for i in range(data_volume):
                 value = self.osc.measure_DC_Vrms()
                 # wait for the scope to set
-                time.sleep(0.5)
+                time.sleep(0.1)
                 self.Vosc[i].append(value)
                 cur.append(value)
-            result = self.IQR(cur)  # remove the outliers
+            if data_volume > 1:
+                result = self.IQR(cur)  # remove the outliers
+            else:
+                result = cur
             avg = np.mean(result)
             self.Vosc[data_volume].append(avg)
         amplitude_vpp = upper_limit
@@ -126,7 +133,10 @@ class Handler:
             time.sleep(0.5)
             self.Vosc[i].append(value)
             cur.append(value)
-        result = self.IQR(cur)  # remove the outliers
+        if data_volume > 1:
+            result = self.IQR(cur)  # remove the outliers
+        else:
+            result = cur
         avg = np.mean(result)
         self.Vosc[data_volume].append(avg)
         print(self.Vgen)
@@ -180,7 +190,10 @@ class Handler:
                 time.sleep(0.5)
                 self.angle_Vosc[i].append(value)
                 cur.append(value)
-            result = self.IQR(cur)  # remove the outliers
+            if data_volume > 1:
+                result = self.IQR(cur)  # remove the outliers
+            else:
+                result = cur
             avg = np.mean(result)
             self.angle_Vosc[data_volume].append(avg)
         while self.pause == 1:
@@ -199,7 +212,10 @@ class Handler:
             time.sleep(0.5)
             self.angle_Vosc[i].append(value)
             cur.append(value)
-        result = self.IQR(cur)  # remove the outliers
+        if data_volume > 1:
+            result = self.IQR(cur)  # remove the outliers
+        else:
+            result = cur
         avg = np.mean(result)
         self.angle_Vosc[data_volume].append(avg)
         print(self.angle)
