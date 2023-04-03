@@ -1,5 +1,4 @@
 import serial
-import asyncio
 from serial.serialutil import SerialException
 from time import sleep
 

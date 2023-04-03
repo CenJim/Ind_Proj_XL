@@ -1,23 +1,22 @@
 import copy
-import os
+
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor
+
 
 from PyQt6.QtCore import QSize
-from PyQt6.QtWidgets import QMainWindow, QTextEdit, QApplication, QGridLayout, QLabel, QWidget, QFileDialog, \
+from PyQt6.QtWidgets import QMainWindow, QApplication, QGridLayout, QWidget, QFileDialog, \
     QTableWidget, QTableWidgetItem
 from PyQt6.QtGui import QIcon, QAction
-from qt_material import apply_stylesheet
+
 
 from layout.Widget_bottom_left import Widget_bottom_left
 from layout.Widget_bottom_right import Widget_bottom_right
 from layout.Widget_top_left import Widget_top_left
 from layout.Widget_top_right import Widget_top_right
 
-import numpy as np
 import threading
-import pandas as pd
+
 
 
 class MainWindow(QMainWindow):

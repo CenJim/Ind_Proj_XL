@@ -1,8 +1,6 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QLabel
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
 import pyqtgraph as pg
-import pandas as pd
-import numpy as np
 
 class Widget_bottom_right(QWidget):
 

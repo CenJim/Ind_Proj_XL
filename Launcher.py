@@ -8,7 +8,7 @@ from qt_material import apply_stylesheet
 import Dsox2002a as ds
 import Handler as hl
 import tektronix_func_gen as tfg
-from UIQt import mainWindow, mainWindowTest
+from UIQt import mainWindow
 
 
 class Launcher(QWidget):

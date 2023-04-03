@@ -2,9 +2,7 @@ import struct
 import sys
 
 import matplotlib.pyplot as plt
-import matplotlib.cbook as cbook
 
-import numpy as np
 import pandas as pd
 
 import os
