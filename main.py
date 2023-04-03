@@ -2,6 +2,7 @@ import pyvisa
 import Dsox2002a as ds
 import Handler as hl
 import tektronix_func_gen as tfg
+from Launcher import launcher
 from UIQt import mainWindow, mainWindowTest
 
 
@@ -51,11 +52,11 @@ with tfg.FuncGen('USB0::0x0699::0x0353::1516608::INSTR') as fgen:
 """
 
 print(getResoureList())
-handler = hl.Handler(ds.Dsox2002a(pyvisa.ResourceManager(), 'USB0::0x0957::0x179B::MY55442396::INSTR'),
-                     tfg.FuncGen('USB0::0x0699::0x0353::1516608::INSTR'))
 
-# handler.osc_connect()
-# handler.draw_Vgen_Vosc_chart(1)
+launcher()
 
-mainWindow(handler)
+# handler = hl.Handler(ds.Dsox2002a(pyvisa.ResourceManager(), 'USB0::0x0957::0x179B::MY55442396::INSTR'),
+#                      tfg.FuncGen('USB0::0x0699::0x0353::1516608::INSTR'))
+#
+# mainWindow(handler)
 # mainWindowTest()

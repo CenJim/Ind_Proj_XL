@@ -21,7 +21,7 @@ class Handler:
         self.angle_osc_result = np.array([])
         self.fgen_osc_done = 0
         self.angle_osc_done = 0
-        self.serial_sender = SerialSender()
+        # self.serial_sender = SerialSender()
 
     # "1" is on, others are off
     def fgen_ch1_switch(self, flag):

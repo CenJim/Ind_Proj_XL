@@ -369,11 +369,8 @@ class Angle_osc_DataWindow(QTableWidget):
 
 
 def mainWindow(handler):
-    app = QApplication(sys.argv)
     mainWindow = MainWindow(handler)
-    apply_stylesheet(app, theme='dark_teal.xml')
     mainWindow.show()
-    sys.exit(app.exec())
 
 
 def mainWindowTest():
