@@ -1,3 +1,4 @@
+import os
 import time
 from statistics import quantiles
 
@@ -9,7 +10,7 @@ from serial_motor import SerialSender
 
 
 class Handler:
-    def __init__(self, osc, fgen, rasp):
+    def __init__(self, osc, fgen, rasp, file_path):
         self.osc = osc
         self.fgen = fgen
         self.angle = []
@@ -24,6 +25,7 @@ class Handler:
         self.angle_osc_done = 0
         if rasp != 'None':
             self.serial_sender = SerialSender(rasp)
+        self.file_path = file_path
 
     # "1" is on, others are off
     def fgen_ch1_switch(self, flag):
@@ -78,7 +80,7 @@ class Handler:
         self.fgen_ch1_switch(1)
         time.sleep(1)
         # self.osc.capture_DC()
-        self.osc.analyze_waveform()
+        self.osc.analyze_waveform(self.file_path)
 
     # for the fgen_osc experiment
     def draw_Vgen_Vosc_chart(self, interval, frequency, data_volume, wait_time, lower_limit, upper_limit):
@@ -153,7 +155,11 @@ class Handler:
             # {'fgen': Vgen, 'Vosc_0': Vosc[0], 'Vosc_1': Vosc[1], 'Vosc_2': Vosc[2]}
             dataframe_format
         )
-        vgen_vosc_dataframe.to_csv('data/fgen_osc_data.csv', index=True, sep=',')
+        directory = 'data'
+        path = os.path.join(self.file_path, directory)
+        if not os.path.exists(path):
+            os.mkdir(path)
+        vgen_vosc_dataframe.to_csv(self.file_path + '/data/fgen_osc_data.csv', index=True, sep=',')
         # f = open("data/fgen_osc_data.csv", "w")
         # for i in range(0, len(Vgen) - 1):
         #     f.write("%f, %f\n" % (Vgen[i], Vosc[0][i]))
@@ -232,7 +238,11 @@ class Handler:
             # {'fgen': Vgen, 'Vosc_0': Vosc[0], 'Vosc_1': Vosc[1], 'Vosc_2': Vosc[2]}
             dataframe_format
         )
-        vgen_vosc_dataframe.to_csv('data/angle_osc_data.csv', index=True, sep=',')
+        directory = 'data'
+        path = os.path.join(self.file_path, directory)
+        if not os.path.exists(path):
+            os.mkdir(path)
+        vgen_vosc_dataframe.to_csv(self.file_path + '/data/angle_osc_data.csv', index=True, sep=',')
         # f = open("data/fgen_osc_data.csv", "w")
         # for i in range(0, len(Vgen) - 1):
         #     f.write("%f, %f\n" % (Vgen[i], Vosc[0][i]))
@@ -261,7 +271,7 @@ class Handler:
             dataFrame = pd.DataFrame({'angle': self.angle, 'Vosc_0': self.angle_Vosc[0], 'Vosc_1': self.angle_Vosc[1],
                                       'Vosc_2': self.angle_Vosc[2], 'Vosc_3': self.angle_Vosc[3],
                                       'Vosc_4': self.angle_Vosc[4], 'Average': self.angle_Vosc[5]})
-            dataFrame.to_csv('data/angle_osc_data.csv', index=True, sep=',')
+            dataFrame.to_csv(self.file_path + '/data/angle_osc_data.csv', index=True, sep=',')
             return np.array([self.angle, self.angle_Vosc[5]])
 
     def add_data(self, angle):

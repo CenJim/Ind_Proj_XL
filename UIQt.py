@@ -22,9 +22,10 @@ import pandas as pd
 
 class MainWindow(QMainWindow):
 
-    def __init__(self, handler):
+    def __init__(self, handler, file_path):
         super().__init__()
 
+        self.file_path = file_path
         self.test = 0
         # init the widgets that contains the sub-layouts
         self.widget_top_left = Widget_top_left()
@@ -149,7 +150,8 @@ class MainWindow(QMainWindow):
             self.pauseAct.setIcon(QIcon('icon/pause.svg'))
 
     def download_data(self):
-        file_path = QFileDialog.getOpenFileNames(self, "Download Data", os.getcwd() + "/data", "Csv files(*.csv)")
+        self.file_path = str(QFileDialog.getExistingDirectory(self, "Select Directory", self.file_path))
+        self.handler.file_path = self.file_path
 
     def run_waveform(self):
         print('running waveform')
@@ -165,7 +167,7 @@ class MainWindow(QMainWindow):
         self.widget_top_right.setFrequency(self.handler.osc.measure_frequency())
         self.widget_top_right.setPeriod(self.handler.osc.measure_period())
         # draw the waveform
-        self.widget_bottom_left.plot()
+        self.widget_bottom_left.plot(self.file_path)
 
     def run_fgen_osc(self):
         print('running draw fgen_osc')
@@ -368,8 +370,8 @@ class Angle_osc_DataWindow(QTableWidget):
             self.setItem(row, 6, QTableWidgetItem(str(vosc[self.data_volume][row])))
 
 
-def mainWindow(handler):
-    mainWindow = MainWindow(handler)
+def mainWindow(handler, file_path):
+    mainWindow = MainWindow(handler, file_path)
     mainWindow.show()
 
 

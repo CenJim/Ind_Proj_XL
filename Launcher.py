@@ -2,7 +2,7 @@ import glob
 import sys
 
 import serial
-from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, QPushButton, QApplication
+from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, QPushButton, QApplication, QLineEdit, QFileDialog
 from pyvisa import ResourceManager
 from qt_material import apply_stylesheet
 import Dsox2002a as ds
@@ -17,7 +17,8 @@ class Launcher(QWidget):
 
         self.osc_address = ''
         self.fgen_address = ''
-        self.rasp_address = ''
+        self.rasp_address = 'None'
+        self.file_path = ''
 
         self.osc_label = QLabel('Oscilloscope:')
         self.fgen_label = QLabel('Function Generator:')
@@ -25,6 +26,8 @@ class Launcher(QWidget):
         self.osc_combo = QComboBox()
         self.fgen_combo = QComboBox()
         self.rasp_combo = QComboBox()
+        self.directory_line = QLineEdit()
+        self.directory_set = QPushButton('Directory')
         self.enter_button = QPushButton('Enter')
         self.cancel_button = QPushButton('Cancel')
         self.refresh_button = QPushButton('Refresh')
@@ -65,10 +68,17 @@ class Launcher(QWidget):
 
         # set the raspberry pi pico combo box
         self.rasp_combo.textActivated[str].connect(self.rasp_select)
-        self.rasp_combo.setMaximumWidth(350)
+        self.rasp_combo.setMinimumWidth(350)
 
         # set the raspberry pi pico combo boc
         self.rasp_combo.addItem('None')
+
+        # set the directory line
+        self.directory_line.setMinimumWidth(400)
+        self.directory_line.textChanged[str].connect(self.dir_change)
+
+        #set the directory set button
+        self.directory_set.clicked.connect(self.dir_select)
 
         # get all the resource
         self.refresh_resource_list()
@@ -80,6 +90,8 @@ class Launcher(QWidget):
         self.top_layout.addWidget(self.fgen_combo, 1, 1)
         self.top_layout.addWidget(self.rasp_label, 2, 0)
         self.top_layout.addWidget(self.rasp_combo, 2, 1)
+        self.top_layout.addWidget(self.directory_line, 3, 1)
+        self.top_layout.addWidget(self.directory_set, 3, 0)
         self.bottom_layout.addWidget(self.cancel_button, 0, 0)
         self.bottom_layout.addWidget(self.refresh_button, 0, 1)
         self.bottom_layout.addWidget(self.enter_button, 0, 2)
@@ -146,10 +158,17 @@ class Launcher(QWidget):
     def rasp_select(self, text):
         self.rasp_address = text
 
+    def dir_select(self):
+        self.file_path = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        self.directory_line.setText(self.file_path)
+
+    def dir_change(self, text):
+        self.file_path = text
+
     def launch(self):
         handler = hl.Handler(ds.Dsox2002a(ResourceManager(), self.osc_address),
-                             tfg.FuncGen(self.fgen_address), self.rasp_address)
-        mainWindow(handler)
+                             tfg.FuncGen(self.fgen_address), self.rasp_address, self.file_path)
+        mainWindow(handler, self.file_path)
         self.close()
 
 

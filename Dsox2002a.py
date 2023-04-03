@@ -7,6 +7,8 @@ import matplotlib.cbook as cbook
 import numpy as np
 import pandas as pd
 
+import os
+
 debug = 0
 
 class Dsox2002a():
@@ -219,7 +221,7 @@ class Dsox2002a():
         print("Measured Period on channel 1: %.3f" % qresult)
         return qresult
 
-    def analyze_waveform(self):
+    def analyze_waveform(self, file_path):
         # Download waveform data.
         # --------------------------------------------------------
         # Set the waveform points mode.
@@ -277,7 +279,11 @@ class Dsox2002a():
         values = struct.unpack("%dB" % len(bytes(sData)), bytes(sData))
         print("Number of data values: %d" % len(values))
         # Save waveform data values to CSV file.
-        f = open("data/waveform_data.csv", "w")
+        directory = 'data'
+        path = os.path.join(file_path, directory)
+        if not os.path.exists(path):
+            os.mkdir(path)
+        f = open(file_path + "/data/waveform_data.csv", "w")
         for i in range(0, len(values) - 1):
             time_val = x_origin + (i * x_increment)
             voltage = ((values[i] - y_reference) * y_increment) + y_origin
@@ -287,7 +293,7 @@ class Dsox2002a():
         # waveform_data = pd.read_csv('data/waveform_data.csv')
         # waveform_data.plot(0,1)
         # plt.show()
-        self.draw_csv('data/waveform_data.csv')
+        self.draw_csv(file_path + '/data/waveform_data.csv')
 
     # draw the csv file
     def draw_csv(self, fileName):
